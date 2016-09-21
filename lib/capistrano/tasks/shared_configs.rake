@@ -1,12 +1,5 @@
-def within_repo_configs_path(&block)
-  repo_config_path = Pathname.new("#{shared_path}/repo_configs")
-  if test("[ -d #{repo_config_path} ]")
-    within repo_config_path do
-      yield block
-    end
-  else
-    puts "No shared configs located at #{repo_config_path}"
-  end
+def repo_config_path
+  Pathname.new("#{shared_path}/repo_configs")
 end
 
 namespace :shared_configs do
@@ -19,8 +12,13 @@ namespace :shared_configs do
   desc 'Pulls the latest from the shared configs directory'
   task :pull do
     on roles(:app) do
-      within_repo_configs_path do
-        execute 'git pull'
+      if test("[ -d #{repo_config_path} ]")
+        execute <<-COMMAND
+          cd #{repo_config_path}
+          git pull
+        COMMAND
+      else
+        puts "Unable to pull shared configs. No shared configs located at #{repo_config_path}."
       end
     end
   end
@@ -28,8 +26,13 @@ namespace :shared_configs do
   desc 'Symlinks the shared configs directory into the capistrano shared directory'
   task :symlink do
     on roles(:app) do
-      within_repo_configs_path do
-        execute 'cp -rlf * ../'
+      if test("[ -d #{repo_config_path} ]")
+        execute <<-COMMAND
+          cd #{repo_config_path}
+          cp -rlf * ../
+        COMMAND
+      else
+        puts "Unable to symlink shared configs. No shared configs located at #{repo_config_path}."
       end
     end
   end
