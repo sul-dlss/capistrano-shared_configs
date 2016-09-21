@@ -22,7 +22,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The tasks can be made available to your capistrano deploy environments by requiring `capistrano/shared_configs` in your `Capfile`.
+
+The three tasks made available to you are
+
+```
+cap shared_configs:pull
+cap shared_configs:symlink
+cap shared_configs:update
+```
+
+`shared_configs:update` simply calls `pull` and then `symlink` and is intended to provide a simple single command.
+
+This can be added into your deployment workflow to automatically pull and symlink shared configs into your capistrano shared directories, or alternatively just run manually from the command line.
 
 ## Development
 
