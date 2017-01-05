@@ -29,7 +29,7 @@ namespace :shared_configs do
       if test("[ -d #{repo_config_path} ]")
         execute <<-COMMAND
           cd #{repo_config_path}
-          cp -rlf * ../
+          cp -rlf * #{shared_path}
         COMMAND
       else
         puts "Unable to symlink shared configs. No shared configs located at #{repo_config_path}."
