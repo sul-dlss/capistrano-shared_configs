@@ -20,11 +20,14 @@ Or install it yourself as:
 
 ## Usage
 
+It depends on another agent (i.e. puppet) to get the shared_configs branch onto the server.
+
 The tasks can be made available to your capistrano deploy environments by requiring `capistrano/shared_configs` in your `Capfile`.
 
 The three tasks made available to you are
 
 ```
+cap shared_configs:check
 cap shared_configs:pull
 cap shared_configs:symlink
 cap shared_configs:update
