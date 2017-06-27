@@ -14,6 +14,19 @@ namespace :shared_configs do
     end
   end
 
+  desc 'Clone the configs repo:branch; env values are optional: CONFIGS_REPO={repo} CONFIGS_BRANCH={branch}'
+  task :clone do
+    on roles(:app) do
+      repo   = ENV['CONFIGS_REPO']   || 'ssh://git@github.com/sul-dlss/shared_configs.git'
+      branch = ENV['CONFIGS_BRANCH'] || "#{fetch(:application)}_#{fetch(:stage)}"
+      if test("[ -d #{repo_config_path} ]")
+        puts "Found shared configs in #{repo_config_path}."
+      else
+        execute "git clone #{repo} --branch #{branch} --single-branch #{repo_config_path}"
+      end
+    end
+  end
+
   desc 'Pull the latest from the shared configs directory and symlink the files'
   task :update do
     invoke 'shared_configs:pull'

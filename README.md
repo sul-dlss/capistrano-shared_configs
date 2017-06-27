@@ -20,22 +20,44 @@ Or install it yourself as:
 
 ## Usage
 
-It depends on another agent (i.e. puppet) to get the shared_configs branch onto the server.
+The tasks can be made available to your capistrano deploy environments by
+requiring `capistrano/shared_configs` in your `Capfile`.
 
-The tasks can be made available to your capistrano deploy environments by requiring `capistrano/shared_configs` in your `Capfile`.
-
-The three tasks made available to you are
+The tasks available are:
 
 ```
-cap shared_configs:check
-cap shared_configs:pull
-cap shared_configs:symlink
-cap shared_configs:update
+cap shared_configs:check     # Checks the project is ready to work with the shared configs directory
+cap shared_configs:clone     # Clone the configs repo:branch; env values are optional: CONFIGS_REPO={repo} CONFIGS_BRANCH={branch}
+cap shared_configs:pull      # Pulls the latest from the shared configs directory
+cap shared_configs:symlink   # Symlinks the shared configs directory into the capistrano shared directory
+cap shared_configs:update    # Pull the latest from the shared configs directory and symlink the files
 ```
 
-`shared_configs:update` simply calls `pull` and then `symlink` and is intended to provide a simple single command.
+`cap shared_configs:clone` can use optional environment variables, i.e.
+- `CONFIGS_REPO={repo}`     : defaults to ssh://git@github.com/sul-dlss/shared_configs.git
+- `CONFIGS_BRANCH={branch}` : defaults to "#{fetch(:application)}_#{fetch(:stage)}"
 
-This can be added into your deployment workflow to automatically pull and symlink shared configs into your capistrano shared directories, or alternatively just run manually from the command line.
+For example, to get started using the defaults:
+```bash
+cap {stage} shared_configs:clone
+cap {stage} shared_configs:check
+cap {stage} shared_configs:symlink
+```
+
+To override the default clone options:
+```bash
+cap {stage} shared_configs:clone \
+  CONFIGS_REPO=https://{yourUserID}:{yourPasswd}@github.com/sul-dlss/shared_configs.git \
+  CONFIGS_BRANCH=app_name_test_branch
+
+cap {stage} shared_configs:check
+cap {stage} shared_configs:symlink
+```
+
+These tasks can be added into your deployment workflow to automatically pull and symlink shared
+configs into your capistrano shared directories, or alternatively just run manually from
+the command line.
+
 
 ## Development
 
