@@ -45,7 +45,7 @@ To release a new version, update the version number in `version.rb`, and then ru
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/jkeck/capistrano-shared_configs.
+Bug reports and pull requests are welcome on GitHub at https://github.com/sul-dlss/capistrano-shared_configs.
 
 
 ## License
