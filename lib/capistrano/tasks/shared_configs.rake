@@ -6,11 +6,7 @@ namespace :shared_configs do
   desc 'Checks the project is ready to work with the shared configs directory'
   task :check do
     on roles(:app) do
-      if test("[ -d #{repo_config_path} ]")
-        puts "Found shared configs in #{repo_config_path}."
-      else
-        puts "Unable to locate shared configs in #{repo_config_path}."
-      end
+      execute "ls -ld #{repo_config_path}"
     end
   end
 
