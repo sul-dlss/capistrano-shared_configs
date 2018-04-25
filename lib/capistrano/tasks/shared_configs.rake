@@ -20,10 +20,29 @@ namespace :shared_configs do
   task :pull do
     on roles(:app) do
       if test("[ -d #{repo_config_path} ]")
+        # check current SHA
+        sha = capture <<-COMMAND
+          cd #{repo_config_path}
+          git rev-parse HEAD
+        COMMAND
+
         execute <<-COMMAND
           cd #{repo_config_path}
           git pull
         COMMAND
+
+        # check new SHA
+        latest_sha = capture <<-COMMAND
+          cd #{repo_config_path}
+          git rev-parse HEAD
+        COMMAND
+
+        # log interpolated github compare link
+        if sha == latest_sha
+          puts 'Nothing new'
+        else
+          puts 'Send a notification'
+        end
       else
         puts "Unable to pull shared configs. No shared configs located at #{repo_config_path}."
       end
